@@ -114,7 +114,7 @@ def main():
 
     # Project transition streamlines onto the UMAP
     combined_kernel.plot_projection(
-        basis="umap", color=LEIDEN_KEY, legend_loc="right", recompute=True
+        basis="umap", color=LEIDEN_KEY, legend_loc="right", recompute=True, show=False
     )
     savefig("05_cellrank_streamlines.png")
 
