@@ -10,6 +10,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 import scanpy as sc
+from matplotlib.colors import LinearSegmentedColormap
 
 # pandas 3 string dtype breaks h5ad writing without this
 anndata.settings.allow_write_nullable_strings = True
@@ -22,13 +23,22 @@ H5AD_MRVI = PROJECT_DIR / "musc_mrvi.h5ad"          # mrvi constructed object
 H5AD_CELLRANK = PROJECT_DIR / "musc_cellrank.h5ad"  # cellrank constructed object
 MRVI_MODEL_DIR = PROJECT_DIR / "mrvi_model"         # trained MrVI model
 FIG_DIR = PROJECT_DIR / "figures"                   # output figures
+TABLES_DIR = PROJECT_DIR / "tables"                 # output tables (DE genes, etc.)
 
-SAMPLE_KEY = "orig.ident"   # sample identifier column 
+SAMPLE_KEY = "orig.ident"   # sample identifier column
 LEIDEN_KEY = "leiden_musc"  # leiden clustering key in adata.obs
 
 # Myo markers + targets
-MYO_MARKERS = ["PAX7", "MYF5", "MYOD1", "MYOG"]
+MYO_MARKERS = ["PAX7", "PAX3", "MYF5", "MYOD1", "MYOG"]
 TARGET_GENES = ["SELENON", "ELL2"]
+
+# Differential expression (sc.tl.rank_genes_groups, the scanpy equivalent of Seurat's FindAllMarkers)
+N_TOP_DE_GENES = 10  # top markers to keep per cluster
+
+# Purple/black/yellow scale matching Seurat's default DoHeatmap palette
+SEURAT_HEATMAP_CMAP = LinearSegmentedColormap.from_list(
+    "seurat_purple_yellow", ["magenta", "black", "yellow"]
+)
 
 # MrVI
 SEED = 4269             
@@ -57,12 +67,23 @@ def configure_plotting():
 def savefig(path, fig=None, close=True):
     """Saves current figure to figures/. From MingKe"""
     path = Path(path)
+    if not path.is_absolute():
+        path = FIG_DIR / path
     path.parent.mkdir(parents=True, exist_ok=True)
     if fig is None:
         fig = plt.gcf()
     fig.savefig(path, bbox_inches="tight")
     if close:
         plt.close(fig)
+
+
+def savecsv(df, path):
+    """Saves a dataframe to tables/."""
+    path = Path(path)
+    if not path.is_absolute():
+        path = TABLES_DIR / path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False)
 
 
 def present_genes(adata, genes):

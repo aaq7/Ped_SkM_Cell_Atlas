@@ -24,14 +24,20 @@ import numpy as np
 import scanpy as sc
 
 from cellrank.kernels import PseudotimeKernel
+from cellrank.kernels import ConnectivityKernel
 
 from utils import (
     H5AD_CELLRANK,
     H5AD_MRVI,
+    LEIDEN_KEY,
     SEED,
+    KERNEL_WEIGHT_CONNECTIVITY,
+    KERNEL_WEIGHT_DIRECTIONAL,
+    present_genes,
     configure_plotting,
     savefig,
 )
+
 
 # To find a root we need to evaluate expression of myo markers (PAX7)
 def get_expression(adata, gene):
@@ -91,14 +97,29 @@ def main():
     adata = compute_dpt(adata, root)
 
     # Build the PseudotimeKernel based on the computed DPT pseudotime
-    adata = PseudotimeKernel(adata, time_key = "dpt_pseudotime").compute_transition_matrix(threshold_scheme="soft")
+    pk = PseudotimeKernel(adata, time_key="dpt_pseudotime").compute_transition_matrix(threshold_scheme="soft")
 
     # Visualize the DPT pseudotime on the UMAP embedding
-    sc.pl.umap(adata, color="dpt_pseudotime", cmap="plasma")
+    sc.pl.umap(adata, color="dpt_pseudotime", cmap="plasma", show=False)
     savefig("04_cellrank_pseudotime.png")
 
-    adata.write_h5ad(H5AD_CELLRANK)
 
+    # Additional plots from Figure 2 of Theis et al. 2024
+
+    # Build connectivity kernel and combine with directional pseudotime 
+    ck = ConnectivityKernel(adata).compute_transition_matrix()
+    combined_kernel = (
+        KERNEL_WEIGHT_DIRECTIONAL * pk + KERNEL_WEIGHT_CONNECTIVITY * ck
+    )
+
+    # Project transition streamlines onto the UMAP
+    combined_kernel.plot_projection(
+        basis="umap", color=LEIDEN_KEY, legend_loc="right", recompute=True
+    )
+    savefig("05_cellrank_streamlines.png")
+
+    # Save final AnnData object
+    adata.write_h5ad(H5AD_CELLRANK)
 
 if __name__ == "__main__":
     main()
