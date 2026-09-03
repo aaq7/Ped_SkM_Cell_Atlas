@@ -52,10 +52,7 @@ def build_anndata():
 
 
 def preprocess(adata):
-    """Filters low-detection genes and log-normalizes."""
-
-    # Remove genes that are detected in fewer than 5 cells
-    sc.pp.filter_genes(adata, min_cells=5)
+    """Log-normalizes for MrVI."""
 
     # Create copy of UMI counts into lognorm layer
     adata.layers["lognorm"] = adata.layers["counts"].copy()
