@@ -71,12 +71,12 @@ def main():
     )
     savefig("02_de_genes_heatmap.png")
 
-    # Verify the DE test against the myo markers: myo markers + top 1 DE gene per cluster
-    # (skip genes already among the myo markers so each cluster contributes a new gene)
+    # Verify the DE test against the myo markers: myo markers + top 3 DE genes per cluster
+    # (skip genes already among the myo markers so each cluster contributes new genes)
     top_de_genes = (
         de_genes[~de_genes["gene"].isin(MYO_MARKERS)]
         .groupby("cluster", sort=False)
-        .head(1)["gene"]
+        .head(3)["gene"]
         .drop_duplicates()
         .tolist()
     )
@@ -99,7 +99,7 @@ def main():
     sc.pl.umap(adata, color=myo_markers, ncols=3, cmap="viridis", show=False)
     savefig("04_featureplot_myomarkers.png")
 
-    # Feature plot of the top DE gene per cluster
+    # Feature plot of the top DE genes per cluster
     sc.pl.umap(adata, color=top_de_genes, ncols=3, cmap="viridis", show=False)
     savefig("05_featureplot_de_genes.png")
 
