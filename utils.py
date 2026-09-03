@@ -35,6 +35,19 @@ TARGET_GENES = ["SELENON", "ELL2"]
 # Differential expression (sc.tl.rank_genes_groups, the scanpy equivalent of Seurat's FindAllMarkers)
 N_TOP_DE_GENES = 10  # top markers to keep per cluster
 
+# MuSC/progenitor states + marker genes from the Cornell pediatric muscle atlas
+# (Orton et al.): "Quiescent MuSC subtypes were marked by expression of canonical
+# MuSC-associated genes including PAX7, MEG3, CALCR, and SPRY1, while activated and
+# progenitor populations showed increased expression of markers including MEGF10,
+# CXCR4, CDK4, MKI67, MYF5, MYOG, and MEF2C. Myogenic progenitor and committed
+# populations showed expression of differentiation-associated and fiber-type-associated
+# genes, including MYOD1, MYOG, MYH7B, MYH1, and MYH7."
+CORNELL_MUSC_CLASSES = {
+    "Quiescent MuSC": ["PAX7", "MEG3", "CALCR", "SPRY1"],
+    "Activated/progenitor": ["MEGF10", "CXCR4", "CDK4", "MKI67", "MYF5", "MYOG", "MEF2C"],
+    "Myogenic progenitor/committed": ["MYOD1", "MYOG", "MYH7B", "MYH1", "MYH7"],
+}
+
 # Purple/black/yellow scale matching Seurat's default DoHeatmap palette
 SEURAT_HEATMAP_CMAP = LinearSegmentedColormap.from_list(
     "seurat_purple_yellow", ["magenta", "black", "yellow"]
