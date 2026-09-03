@@ -75,7 +75,7 @@ def train_mrvi(adata, sample_key):
 
     from scvi.external import MRVI 
 
-    # skip retraining on reruns 
+    # Skip retraining on reruns 
     if MRVI_MODEL_DIR.exists():
         return MRVI.load(str(MRVI_MODEL_DIR), adata=adata)
 
@@ -96,7 +96,7 @@ def train_mrvi(adata, sample_key):
 
 def main():
     configure_plotting()
-    sc.settings.n_jobs = 4  # 4 cpu cores for fast processing
+    sc.settings.n_jobs = 4  # 4 cpu cores 
 
     # Construct annData object
     adata = build_anndata()

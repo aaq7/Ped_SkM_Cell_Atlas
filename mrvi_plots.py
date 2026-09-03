@@ -19,22 +19,18 @@ from utils import (
 
 
 def find_de_genes(adata, groupby, n_genes):
-    """Runs rank_genes_groups (scanpy's equivalent of Seurat's FindAllMarkers)
-    and returns the top n_genes markers per cluster as a tidy dataframe."""
+    """Runs rank_genes_groups and returns the top n_genes markers per cluster."""
 
+    # Run with wilcoxon test for statistic
     sc.tl.rank_genes_groups(adata, groupby=groupby, method="wilcoxon")
 
+    # Get results in dataframe
     de = sc.get.rank_genes_groups_df(adata, group=None)
+    # Group by cluster and get the top n genes
     de = de.groupby("group", sort=False).head(n_genes).reset_index(drop=True)
-    de = de.rename(columns={
-        "group": "cluster",
-        "names": "gene",
-        "scores": "score",
-        "logfoldchanges": "log2fc",
-        "pvals": "pval",
-        "pvals_adj": "pval_adj",
-    })
-    return de[["cluster", "gene", "score", "log2fc", "pval", "pval_adj"]]
+
+    # Return cols of the dataframe
+    return de["group", "names", "scores", "logfoldchanges", "pvals", "pvals_adj"]
 
 
 def main():
@@ -71,12 +67,11 @@ def main():
     )
     savefig("02_de_genes_heatmap.png")
 
-    # Verify the DE test against the myo markers: myo markers + top 3 DE genes per cluster
-    # (skip genes already among the myo markers so each cluster contributes new genes)
+    # Select the top 3 DE genes per cluster
     top_de_genes = (
-        de_genes[~de_genes["gene"].isin(MYO_MARKERS)]
-        .groupby("cluster", sort=False)
-        .head(3)["gene"]
+        de_genes[~de_genes["names"].isin(MYO_MARKERS)] # skip if myo marker
+        .groupby("group", sort=False) # group by cluster
+        .head(3)["names"] # gene names 
         .drop_duplicates()
         .tolist()
     )

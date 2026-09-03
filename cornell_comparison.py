@@ -20,7 +20,7 @@ def main():
 
     adata = sc.read_h5ad(H5AD_MRVI)
 
-    # Dotplot of the Cornell marker genes, grouped by state, to see if our clusters agree
+    # Dotplot of the Cornell marker genes
     marker_groups = {name: present_genes(adata, genes) for name, genes in CORNELL_MUSC_CLASSES.items()}
     sc.pl.dotplot(
         adata,
@@ -31,7 +31,7 @@ def main():
         dendrogram=False,
         show=False,
     )
-    savefig("06_cornell_marker_dotplot.png")
+    savefig("07_cornell_marker_dotplot.png")
 
 
 if __name__ == "__main__":

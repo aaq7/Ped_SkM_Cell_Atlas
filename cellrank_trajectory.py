@@ -3,7 +3,7 @@ Trajectory inference with CellRank 2.3.2
 
 DPT (diffusion pseudotime) rooted at a high-PAX7 quiescent cell drives the PseudotimeKernel.
 
-ISSUE: cellrank2 predicts how cells change and develop over time, identifies cell states, and driver genes. 
+CONCERN: cellrank2 predicts how cells change and develop over time, identifies cell states, and driver genes. 
 It does this via modeling cellular dynamics as a markov chain over a nearest-neighbor graph. As such,
 it is not inherently a curve-fitting package, it depends on Kernels to provide biological directionality.
 The pseudotime kernel biases nearest-neighbor graph edges towards devlopmental progression. This requires
@@ -104,7 +104,7 @@ def main():
     savefig("04_cellrank_pseudotime.png")
 
 
-    # Additional plots from Figure 2 of Theis et al. 2024
+    # Additional plot from Figure 2 of Theis et al. 2024
 
     # Build connectivity kernel and combine with directional pseudotime 
     ck = ConnectivityKernel(adata).compute_transition_matrix()
