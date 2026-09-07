@@ -39,11 +39,10 @@ def build_anndata():
     barcodes = pd.read_csv(EXPORT_DIR / "barcodes.tsv", header=None)[0].astype(str).values
     meta = pd.read_csv(EXPORT_DIR / "metadata.csv")
 
-    # Age (and other donor-level fields) live in a separate csv keyed by donor ID,
-    # not orig.ident -- join it in here so it's available for the rest of the analysis
-    meta[DONOR_KEY] = sample_to_donor_id(meta[SAMPLE_KEY])
+    # Age metadata stored in different file
+    meta[DONOR_KEY] = sample_to_donor_id(meta[SAMPLE_KEY]) # match via donor id
     donor_meta = load_donor_metadata()
-    meta = meta.merge(donor_meta, on=DONOR_KEY, how="left")
+    meta = meta.merge(donor_meta, on=DONOR_KEY, how="left") # merge the age data
     missing_age = meta.loc[meta["age_years"].isna(), DONOR_KEY].unique()
     if len(missing_age):
         raise ValueError(f"No age metadata found for donor(s): {sorted(missing_age)}")

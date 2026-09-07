@@ -22,15 +22,13 @@ def main():
 
     adata = sc.read_h5ad(H5AD_MRVI)
 
-    # Plain "cluster N" labels, ordered numerically, instead of naming our own subtypes
     cluster_order = sorted(adata.obs[LEIDEN_KEY].unique(), key=int)
     adata.obs["cluster_label"] = pd.Categorical(
         "cluster " + adata.obs[LEIDEN_KEY].astype(str),
         categories=[f"cluster {c}" for c in cluster_order],
     )
 
-    # Dotplot using Cornell's exact gene list/order, clusters on x-axis, genes on y-axis,
-    # and their pink/blue color scale, for a 1:1 comparison with their Figure 3B
+    # Dotplot using Cornell's gene list
     genes = present_genes(adata, CORNELL_FIGURE_GENES)
     sc.pl.dotplot(
         adata,

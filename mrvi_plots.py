@@ -54,7 +54,7 @@ def main():
     de_genes = find_de_genes(adata, LEIDEN_KEY, N_TOP_DE_GENES)
     savecsv(de_genes, "de_genes_per_cluster.csv")
 
-    # Heatmap of the top DE genes per cluster, Seurat DoHeatmap-style purple/black/yellow scale
+    # Heatmap of the top DE genes per cluster
     sc.pl.rank_genes_groups_heatmap(
         adata,
         n_genes=N_TOP_DE_GENES,
