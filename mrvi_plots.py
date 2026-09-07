@@ -30,7 +30,7 @@ def find_de_genes(adata, groupby, n_genes):
     de = de.groupby("group", sort=False).head(n_genes).reset_index(drop=True)
 
     # Return cols of the dataframe
-    return de["group", "names", "scores", "logfoldchanges", "pvals", "pvals_adj"]
+    return de[["group", "names", "scores", "logfoldchanges", "pvals", "pvals_adj"]]
 
 
 def main():

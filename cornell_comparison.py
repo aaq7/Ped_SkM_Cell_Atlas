@@ -3,10 +3,12 @@ Compares BCH satellite cell subclusters to the major MuSC/progenitor states
 identified in the Cornell pediatric muscle atlas (Orton et al.).
 """
 
+import pandas as pd
 import scanpy as sc
 
 from utils import (
-    CORNELL_MUSC_CLASSES,
+    CORNELL_DOTPLOT_CMAP,
+    CORNELL_FIGURE_GENES,
     H5AD_MRVI,
     LEIDEN_KEY,
     configure_plotting,
@@ -20,14 +22,23 @@ def main():
 
     adata = sc.read_h5ad(H5AD_MRVI)
 
-    # Dotplot of the Cornell marker genes
-    marker_groups = {name: present_genes(adata, genes) for name, genes in CORNELL_MUSC_CLASSES.items()}
+    # Plain "cluster N" labels, ordered numerically, instead of naming our own subtypes
+    cluster_order = sorted(adata.obs[LEIDEN_KEY].unique(), key=int)
+    adata.obs["cluster_label"] = pd.Categorical(
+        "cluster " + adata.obs[LEIDEN_KEY].astype(str),
+        categories=[f"cluster {c}" for c in cluster_order],
+    )
+
+    # Dotplot using Cornell's exact gene list/order, clusters on x-axis, genes on y-axis,
+    # and their pink/blue color scale, for a 1:1 comparison with their Figure 3B
+    genes = present_genes(adata, CORNELL_FIGURE_GENES)
     sc.pl.dotplot(
         adata,
-        var_names=marker_groups,
-        groupby=LEIDEN_KEY,
+        var_names=genes,
+        groupby="cluster_label",
         standard_scale="var",
-        cmap="Reds",
+        cmap=CORNELL_DOTPLOT_CMAP,
+        swap_axes=True,
         dendrogram=False,
         show=False,
     )
