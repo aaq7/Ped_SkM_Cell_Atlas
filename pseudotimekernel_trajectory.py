@@ -8,11 +8,10 @@ It does this via modeling cellular dynamics as a markov chain over a nearest-nei
 it is not inherently a curve-fitting package, it depends on Kernels to provide biological directionality.
 The pseudotime kernel biases nearest-neighbor graph edges towards devlopmental progression. This requires
 an explicit progression denoted by an external pseudotime algorithm, usually DPT or Palantir. Palantir works
-best for data with several plausible terminal states/branches. DPT works well for trajectories with a clear 
+best for data with several plausible terminal states/branches. DPT works well for trajectories with a clear
 root cell. Since we are interested in differentiation from a quiescent state denoted by PAX7, DPT is a
-more suitable choice, although outdated (2016). Additionally, other kernals like CytoTRACE does not work
-for our data because it was validated on systems with a wide range in transcriptional complexity. I tried
-it and it was not able to produce meaningful results. 
+more suitable choice, although outdated (2016). See cytotracekernel_trajectory.py for the CytoTRACEKernel
+analysis (uses transcriptional complexity instead of an explicit root cell to order cells).
 
 Pipeline:
 1) Find a root to anchor pseudotime 
@@ -27,13 +26,12 @@ from cellrank.kernels import PseudotimeKernel
 from cellrank.kernels import ConnectivityKernel
 
 from utils import (
-    H5AD_CELLRANK,
+    H5AD_PSEUDOTIMEKERNEL,
     H5AD_MRVI,
     LEIDEN_KEY,
     SEED,
     KERNEL_WEIGHT_CONNECTIVITY,
     KERNEL_WEIGHT_DIRECTIONAL,
-    present_genes,
     configure_plotting,
     savefig,
 )
@@ -101,7 +99,7 @@ def main():
 
     # Visualize the DPT pseudotime on the UMAP embedding
     sc.pl.umap(adata, color="dpt_pseudotime", cmap="plasma", show=False)
-    savefig("04_cellrank_pseudotime.png")
+    savefig("06_pseudotimekernel_umap.png")
 
 
     # Additional plot from Figure 2 of Theis et al. 2024
@@ -116,10 +114,10 @@ def main():
     combined_kernel.plot_projection(
         basis="umap", color=LEIDEN_KEY, legend_loc="right", recompute=True, show=False
     )
-    savefig("05_cellrank_streamlines.png")
+    savefig("07_pseudotimekernel_streamlines.png")
 
     # Save final AnnData object
-    adata.write_h5ad(H5AD_CELLRANK)
+    adata.write_h5ad(H5AD_PSEUDOTIMEKERNEL)
 
 if __name__ == "__main__":
     main()

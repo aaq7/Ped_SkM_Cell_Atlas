@@ -1,3 +1,5 @@
 {
-    "python.defaultInterpreterPath": "/Users/aaronquan/anaconda3/envs/musc/bin/python"
+    "python.defaultInterpreterPath": "/Users/aaronquan/anaconda3/envs/musc/bin/python",
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
 }

@@ -94,10 +94,5 @@ def main():
     sc.pl.umap(adata, color=myo_markers, ncols=3, cmap="viridis", show=False)
     savefig("04_featureplot_myomarkers.png")
 
-    # Feature plot of the top DE genes per cluster
-    sc.pl.umap(adata, color=top_de_genes, ncols=3, cmap="viridis", show=False)
-    savefig("05_featureplot_de_genes.png")
-
-
 if __name__ == "__main__":
     main()

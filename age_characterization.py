@@ -22,13 +22,13 @@ from utils import (
     MRVI_MAX_EPOCHS,
     MRVI_N_LATENT,
     RESULT_DIR,
+    SAMPLE_KEY,
     SUBTYPE_ORDER,
     age_group_palette,
     annotate_res03,
     bh_fdr,
     configure_plotting,
     expression_matrix,
-    get_sample_key,
     plot_heatmap,
     present_genes,
     read_adata,
@@ -56,7 +56,7 @@ def try_load_mrvi_model(adata):
     from scvi.external import MRVI
 
     if not AGE_MODEL_DIR.exists():
-        MRVI.setup_anndata(adata, layer="counts", sample_key=get_sample_key(adata))
+        MRVI.setup_anndata(adata, layer="counts", sample_key=SAMPLE_KEY)
         model = MRVI(adata, n_latent=MRVI_N_LATENT)
         model.train(max_epochs=MRVI_MAX_EPOCHS, batch_size=MRVI_BATCH_SIZE, early_stopping=True)
         AGE_MODEL_DIR.mkdir(parents=True, exist_ok=True)
@@ -422,7 +422,6 @@ def plot_gene_level_age_effect(adata, output_dir, model=None):
         .head(10)
     )
     genes = list(dict.fromkeys(keep["gene"]))
-    mat = table.pivot(index="subtype", columns="gene", values="rho").reindex(SUBTYPE_ORDER)[genes]
 
     configure_plotting()
     fig, ax = plt.subplots(figsize=(max(7, 0.32 * len(genes) + 2), 3.5))
@@ -456,7 +455,7 @@ def plot_gene_level_age_effect(adata, output_dir, model=None):
 
 # From Mingke
 def plot_local_sample_distance(adata, output_dir):
-    sample_key = get_sample_key(adata)
+    sample_key = SAMPLE_KEY
     if "X_mrvi_z" in adata.obsm:
         z = np.asarray(adata.obsm["X_mrvi_z"])
     elif "X_mrvi_u" in adata.obsm:
