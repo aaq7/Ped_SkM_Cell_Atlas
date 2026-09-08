@@ -17,7 +17,6 @@ from utils import (
     AGE_KEY,
     AGE_MODEL_DIR,
     ANNOTATION_KEY,
-    CLASSIC_PATHWAYS,
     MRVI_BATCH_SIZE,
     MRVI_MAX_EPOCHS,
     MRVI_N_LATENT,
@@ -37,6 +36,26 @@ from utils import (
     spearman_table,
     subtype_palette,
 )
+
+# Candidate age-related genes, from Mingke
+CANDIDATE_AGE_GENES = [
+    "ABCA8",
+    "ABCA10",
+    "IGF1",
+    "CCN5",
+    "CRLF1",
+    "VIT",
+    "PTGIS",
+    "ABLIM3",
+    "GREB1L",
+    "PRKG1",
+    "AJAP1",
+    "FKBP5",
+    "GPHN",
+    "LRRC7",
+    "COL15A1",
+    "LAMA2",
+]
 
 
 # Sizes the panel grid to the actual number of subtypes (instead of hardcoding #6)
@@ -93,12 +112,13 @@ def subset_by_subtype(adata, max_cells_per_subtype=800, random_state=0):
 
 # From Mingke
 def plot_age_umap(adata, output_dir):
+    combined_palette = {**subtype_palette(), **age_group_palette()}
     sc.pl.umap(
         adata,
-        color=[AGE_KEY, ANNOTATION_KEY],
-        palette=subtype_palette(),
+        color=[ANNOTATION_KEY, AGE_KEY, AGE_GROUP_KEY],
+        palette=combined_palette,
         frameon=False,
-        title=["", ""],
+        title=["", "", ""],
         show=False,
     )
     savefig(output_dir / "age_umap.pdf")
@@ -121,7 +141,7 @@ def plot_number_age_groups(fractions, output_dir):
         for i, (group, vals) in enumerate(zip(groups, data), 1):
             if len(vals):
                 x = np.random.default_rng(0).normal(i, 0.04, size=len(vals))
-                ax.scatter(x, vals, s=15, color=palette[group], alpha=0.9, linewidth=0)
+                ax.scatter(x, vals, s=15, color="#3f3f3f", alpha=0.7, linewidth=0)
         ax.set_title(subtype, fontsize=10)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels(groups, rotation=45, ha="right")
@@ -185,6 +205,8 @@ def plot_differential_abundance_age_group(fractions, output_dir, adata=None, mod
                     mat,
                     output_dir / "differential_abundance_age_group_enrichment.pdf",
                     cmap="RdBu_r",
+                    vmin=float(np.nanmin(mat.to_numpy(dtype=float))),
+                    vmax=float(np.nanmax(mat.to_numpy(dtype=float))),
                     cbar_label="MRVI log enrichment",
                 )
                 return mat
@@ -203,6 +225,8 @@ def plot_differential_abundance_age_group(fractions, output_dir, adata=None, mod
         enrichment,
         output_dir / "differential_abundance_age_group_enrichment.pdf",
         cmap="RdBu_r",
+        vmin=float(np.nanmin(enrichment.to_numpy(dtype=float))),
+        vmax=float(np.nanmax(enrichment.to_numpy(dtype=float))),
         cbar_label="log2 enrichment",
     )
     return enrichment
@@ -348,6 +372,7 @@ def age_gene_effect_table(adata, candidate_genes):
 
 # From Mingke
 def plot_gene_level_age_effect(adata, output_dir, model=None):
+    candidate_genes = present_genes(adata, CANDIDATE_AGE_GENES)
     if model is not None:
         try:
             inject_sample_covariates(model, adata)
@@ -376,13 +401,12 @@ def plot_gene_level_age_effect(adata, output_dir, model=None):
                     mean_lfc = lfc.loc[idx].mean(axis=0)
                     mean_pde = pde.loc[idx].mean(axis=0)
                     tab = pd.DataFrame({"gene": mean_lfc.index, "mean_lfc": mean_lfc.values, "mean_pde": mean_pde.values})
+                    tab = tab[tab["gene"].isin(candidate_genes)]
                     tab = tab[np.isfinite(tab["mean_lfc"]) & np.isfinite(tab["mean_pde"])]
                     tab["subtype"] = subtype
-                    up = tab[tab["mean_lfc"] > 0].sort_values(["mean_pde", "mean_lfc"], ascending=[False, False]).head(5)
-                    down = tab[tab["mean_lfc"] < 0].sort_values(["mean_pde", "mean_lfc"], ascending=[False, True]).head(5)
-                    rows.append(pd.concat([up, down], ignore_index=True))
+                    rows.append(tab)
                 table = pd.concat(rows, ignore_index=True)
-                genes = list(dict.fromkeys(table["gene"].tolist()))
+                genes = [g for g in candidate_genes if g in set(table["gene"])]
 
                 configure_plotting()
                 fig, ax = plt.subplots(figsize=(max(7, 0.32 * len(genes) + 2), 3.5))
@@ -413,15 +437,9 @@ def plot_gene_level_age_effect(adata, output_dir, model=None):
         except Exception as exc:
             print(f"MRVI differential_expression lfc/pde failed; using expression-age correlation. Reason: {exc}")
 
-    candidate_genes = sorted(set(sum(CLASSIC_PATHWAYS.values(), [])))
     table = age_gene_effect_table(adata, candidate_genes)
     table["score"] = table["rho"].abs()
-    keep = (
-        table.sort_values(["subtype", "score"], ascending=[True, False])
-        .groupby("subtype", observed=True)
-        .head(10)
-    )
-    genes = list(dict.fromkeys(keep["gene"]))
+    genes = [g for g in candidate_genes if g in set(table["gene"])]
 
     configure_plotting()
     fig, ax = plt.subplots(figsize=(max(7, 0.32 * len(genes) + 2), 3.5))
