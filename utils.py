@@ -34,12 +34,22 @@ RESULT_DIR = PROJECT_DIR / "results_age"            # age characterization outpu
 SAMPLE_KEY = "orig.ident"   # sample identifier column
 DONOR_KEY = "donor_id"      # donor identifier column, derived from SAMPLE_KEY
 LEIDEN_KEY = "leiden_musc"  # leiden clustering key in adata.obs
-ANNOTATION_KEY = "cluster_label"  # "cluster N" labels derived from LEIDEN_KEY (see annotate_res03)
+ANNOTATION_KEY = "cluster_label"  # subtype labels derived from LEIDEN_KEY (see annotate_res03)
 AGE_KEY = "age_years"       # donor age in years, from load_donor_metadata
 AGE_GROUP_KEY = "age_group" # binned age, from AGE_GROUP_BINS/LABELS below
 
-# leiden_musc at LEIDEN_RESOLUTION=0.3 is best fit 
-SUBTYPE_ORDER = [f"cluster {i}" for i in range(8)]
+# leiden_musc at LEIDEN_RESOLUTION=0.3 is best fit; maps leiden cluster id -> subtype name
+CLUSTER_NAMES = {
+    "0": "Quiescent MuSC 6 (MYF5+)",
+    "1": "Quiescent MuSC Unknown1",
+    "2": "Quiescent MuSC Unknown2",
+    "3": "Quiescent MuSC 4 (Metabolic)",
+    "4": "Quiescent MuSC Unknown3",
+    "5": "Activated (CXCR4+)/Cycling Progenitor (MKI67+)",
+    "6": "Differentiating Myoblast (MYOG+)",
+    "7": "Type I (MYH7+)/Type II (MYH1+) committed",
+}
+SUBTYPE_ORDER = [CLUSTER_NAMES[str(i)] for i in range(8)]
 
 # Pediatric age-group bins (years), right-inclusive: (0,1], (1,5], (5,11], (11,100]
 AGE_GROUP_BINS = [-0.001, 1, 5, 11, 100]
@@ -183,13 +193,13 @@ def read_adata():
     return adata
 
 def annotate_res03(adata):
-    """Labels each cell with its resolution-0.3 Leiden cluster as 'cluster N'."""
+    """Labels each cell with its resolution-0.3 Leiden cluster's subtype name (see CLUSTER_NAMES)."""
 
     if LEIDEN_KEY not in adata.obs:
         raise ValueError(f"'{LEIDEN_KEY}' not found in adata.obs; run mrvi_subcluster.py first")
 
     adata.obs[ANNOTATION_KEY] = pd.Categorical(
-        "cluster " + adata.obs[LEIDEN_KEY].astype(str), categories=SUBTYPE_ORDER
+        adata.obs[LEIDEN_KEY].astype(str).map(CLUSTER_NAMES), categories=SUBTYPE_ORDER
     )
     return adata
 

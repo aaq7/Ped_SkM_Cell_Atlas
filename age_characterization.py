@@ -14,6 +14,7 @@ from scipy.stats import spearmanr
 
 from utils import (
     AGE_GROUP_KEY,
+    AGE_GROUP_LABELS,
     AGE_KEY,
     AGE_MODEL_DIR,
     ANNOTATION_KEY,
@@ -119,6 +120,8 @@ def plot_age_umap(adata, output_dir):
         palette=combined_palette,
         frameon=False,
         title=["", "", ""],
+        wspace=0.8,
+        legend_fontsize=8,
         show=False,
     )
     savefig(output_dir / "age_umap.pdf")
@@ -201,6 +204,7 @@ def plot_differential_abundance_age_group(fractions, output_dir, adata=None, mod
                 obs = adata.obs.loc[values.index, [ANNOTATION_KEY]]
                 values[ANNOTATION_KEY] = obs[ANNOTATION_KEY].astype(str).values
                 mat = values.groupby(ANNOTATION_KEY, observed=True).mean().reindex(SUBTYPE_ORDER)
+                mat = mat.reindex(columns=AGE_GROUP_LABELS)
                 plot_heatmap(
                     mat,
                     output_dir / "differential_abundance_age_group_enrichment.pdf",
@@ -219,6 +223,7 @@ def plot_differential_abundance_age_group(fractions, output_dir, adata=None, mod
         .mean()
         .unstack(AGE_GROUP_KEY)
         .reindex(SUBTYPE_ORDER)
+        .reindex(columns=AGE_GROUP_LABELS)
     )
     enrichment = np.log2((mat + 1e-4).div(overall + 1e-4, axis=0))
     plot_heatmap(
