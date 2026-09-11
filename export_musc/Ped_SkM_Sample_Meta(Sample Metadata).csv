@@ -1,0 +1,75 @@
+Donor ID,Organism,Assay,Age,Sex,Tissue,Source,Reported Ancestry,Inferred Ancestry
+CTRL100,Homo sapiens,snRNA-seq,4 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL38,Homo sapiens,snRNA-seq,3 yo,F,Deltoid,Biopsy,NA,TBD
+CTRL40,Homo sapiens,snRNA-seq,8 yo,F,Likely Quadriceps,Biopsy,NA,TBD
+CTRL77,Homo sapiens,snRNA-seq,10 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL82,Homo sapiens,snRNA-seq,3 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL83,Homo sapiens,snRNA-seq,16.0 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL86,Homo sapiens,snRNA-seq,16 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL87,Homo sapiens,snRNA-seq,17 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL101,Homo sapiens,snRNA-seq,3 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL5ab,Homo sapiens,snRNA-seq,9.0 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL91bc,Homo sapiens,snRNA-seq,9 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL15ab,Homo sapiens,snRNA-seq,13 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL31ac,Homo sapiens,snRNA-seq,16 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL41c,Homo sapiens,snRNA-seq,16 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL83b,Homo sapiens,snRNA-seq,16 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL78bd,Homo sapiens,snRNA-seq,18 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL106,Homo sapiens,snRNA-seq,0.2 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL128b,Homo sapiens,snRNA-seq,1.10 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL126a,Homo sapiens,snRNA-seq,1.8 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL92c,Homo sapiens,snRNA-seq,2 yo,F,Paraspinal,Biopsy,NA,TBD
+CTRL110a,Homo sapiens,snRNA-seq,2.8 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL116a,Homo sapiens,snRNA-seq,5.2 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL118,Homo sapiens,snRNA-seq,5.7 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL119,Homo sapiens,snRNA-seq,5.8 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL141a,Homo sapiens,snRNA-seq,16.1 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL142,Homo sapiens,snRNA-seq,9.7 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL143,Homo sapiens,snRNA-seq,1.1 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL144a,Homo sapiens,snRNA-seq,2.5 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL145a,Homo sapiens,snRNA-seq,17.1 yo,F,Triceps,Biopsy,NA,TBD
+CTRL146,Homo sapiens,snRNA-seq,5.3 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL147,Homo sapiens,snRNA-seq,11 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL148a,Homo sapiens,snRNA-seq,14.1 yo,M,Likely Gastrocnemius,Biopsy,NA,TBD
+521001,Homo sapiens,snRNA-seq/snATAC-seq,13.5 yo,F,Quadriceps,Autopsy,NA,TBD
+410001,Homo sapiens,snRNA-seq/snATAC-seq,8 yo,F,Quadriceps,Autopsy,NA,TBD
+410002,Homo sapiens,snRNA-seq/snATAC-seq,14 yo,M,Quadriceps,Autopsy,NA,TBD
+521003,Homo sapiens,snRNA-seq/snATAC-seq,0.33 yo,M,Quadriceps,Autopsy,NA,TBD
+CTRL87,Homo sapiens,snRNA-seq/snATAC-seq,17 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL100,Homo sapiens,snRNA-seq/snATAC-seq,4 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL77,Homo sapiens,snRNA-seq/snATAC-seq,10 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL89,Homo sapiens,snRNA-seq/snATAC-seq,11 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL120,Homo sapiens,snRNA-seq/snATAC-seq,0.3 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL114,Homo sapiens,snRNA-seq/snATAC-seq,0.3 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL60,Homo sapiens,snRNA-seq/snATAC-seq,1 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL123a,Homo sapiens,snRNA-seq/snATAC-seq,1.6 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL109a,Homo sapiens,snRNA-seq/snATAC-seq,1.7 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL113,Homo sapiens,snRNA-seq/snATAC-seq,1.8 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL53,Homo sapiens,snRNA-seq/snATAC-seq,2 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL111a,Homo sapiens,snRNA-seq/snATAC-seq,2.3 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL115a,Homo sapiens,snRNA-seq/snATAC-seq,2.3 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL125b,Homo sapiens,snRNA-seq/snATAC-seq,2.4 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL129a,Homo sapiens,snRNA-seq/snATAC-seq,3.9 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL132a,Homo sapiens,snRNA-seq/snATAC-seq,4.1 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL117,Homo sapiens,snRNA-seq/snATAC-seq,4.7 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL64,Homo sapiens,snRNA-seq/snATAC-seq,5 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL131a,Homo sapiens,snRNA-seq/snATAC-seq,5.1 yo,F,Quadriceps,Biopsy,NA,TBD
+CTRL35,Homo sapiens,snRNA-seq/snATAC-seq,14 yo,F,Soleus,Biopsy,NA,TBD
+CTRL104a,Homo sapiens,snRNA-seq/snATAC-seq,17 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL133e,Homo sapiens,snRNA-seq/snATAC-seq,7.5 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL137b,Homo sapiens,snRNA-seq/snATAC-seq,8.3 yo,M,Quadriceps,Biopsy,NA,TBD
+CTRL40a,Homo sapiens,snRNA-seq/snATAC-seq,8 yo,F,Quadriceps,Biopsy,NA,TBD
+410001,Homo sapiens,Spatial Transcriptomics,8 yo,F,Quadriceps,Autopsy,Asian,TBD
+410002,Homo sapiens,Spatial Transcriptomics,14 yo,M,Quadriceps,Autopsy,White,TBD
+410003,Homo sapiens,Spatial Transcriptomics,2 yo,M,Quadriceps,Autopsy,White,TBD
+521003,Homo sapiens,Spatial Transcriptomics,0.33 yo,M,Quadriceps,Autopsy,White,TBD
+521007,Homo sapiens,Spatial Transcriptomics,6.9 yo,M,Quadriceps,Autopsy,White,TBD
+187001,Homo sapiens,Spatial Transcriptomics,11 yo,F,Pectoralis Major,Autopsy,African American,TBD
+187001,Homo sapiens,Spatial Transcriptomics,11 yo,F,Pectoralis Major,Autopsy,African American,TBD
+187001,Homo sapiens,Spatial Transcriptomics,11 yo,F,Intercostal,Autopsy,African American,TBD
+187001,Homo sapiens,Spatial Transcriptomics,11 yo,F,Intercostal,Autopsy,African American,TBD
+MB_0008,Homo sapiens,Spatial Transcriptomics,16 yo,M,Quadriceps,Biopsy,Caucasian,TBD
+MB_0009,Homo sapiens,Spatial Transcriptomics,16 yo,F,Quadriceps,Biopsy,Caucasian,TBD
+MB_0017,Homo sapiens,Spatial Transcriptomics,6 yo,M,Quadriceps,Biopsy,Caucasian,TBD
+MB_0067,Homo sapiens,Spatial Transcriptomics,19 yo,F,Quadriceps,Biopsy,Other,TBD
+MB_0078A,Homo sapiens,Spatial Transcriptomics,5 wk,F,Quadriceps,Biopsy,Native Hawaiian or Pacific Islander,TBD

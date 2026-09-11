@@ -1,0 +1,105 @@
+---
+title: "seurat_export"
+author: "Aaron Q"
+date: "2026-08-30"
+output: html_document
+---
+
+Approach: I am having trouble converting Seurat into annData object in R, and then using that in python. Writing hdf5 file across languages is prone to throwing errors. Exporting the individual components of the Seurat container and then constructing an annData object in python directly is a much smoother approach. 
+
+To make an AnnData object (needed for cellrank2) we need to extract an expression matrix, cell metadata, and feature/gene metadata from Seurat. We also need to export the cell barcodes since the raw integer counts matrix does not contain column information. The barcodes file can help match col identities. 
+
+Load packages
+```{r}
+library(Seurat)
+library(Matrix)
+```
+
+Paths
+```{r}
+input_path  <- "/Users/aaronquan/bch_32sample_annotated.rds"
+checkpoint_path <- "so_diet_counts_only.rds"
+output_path <- "export_musc"
+
+celltype_col <- "cell_type"
+celltype_val <- "Satellite Cells"
+
+dir.create(output_path, showWarnings = FALSE, recursive = TRUE)
+```
+
+```{r}
+# If the lightweight checkpoint already exists, skip straight to it and never
+# touch the huge original file again.
+if (file.exists(checkpoint_path)) {
+
+  message("Loading checkpoint (skipping the full object entirely)")
+  so <- readRDS(checkpoint_path)
+
+} else {
+
+  message("Loading full object...")
+  so <- readRDS(input_path)
+  # UpdateSeuratObject() was crashing R outright (full session restart, not a
+  # catchable error) -- this is the actual crash point identified. Skipping it
+  # for now since the object loads and DietSeurat works without it. If
+  # anything downstream complains about missing v5 structure, that's the
+  # tradeoff of skipping this step.
+  # so <- UpdateSeuratObject(so)
+  gc()
+
+  print(DefaultAssay(so))   # check what it's currently set to
+
+  # FIX: DietSeurat refuses to run if the CURRENT default assay isn't one of
+  # the assays being kept -- it won't let you strip away the active assay.
+  # Harmony objects often leave "integrated", "SCT", or "harmony" as default
+  # even though "RNA" holds the actual counts we want.
+  DefaultAssay(so) <- "RNA"
+
+  # DietSeurat strips everything except what we tell it to keep: no
+  # scale.data (the dense matrix, usually the biggest thing by far), no
+  # dimensional reductions (PCA/Harmony/UMAP), no graphs, no other assays.
+  # We only need raw counts and metadata for this export.
+  message("Stripping to counts-only (dropping scale.data, reductions, graphs)...")
+  so <- DietSeurat(
+    so,
+    assays    = "RNA",
+    layers    = "counts",   # layers= already excludes scale.data; the old
+    dimreducs = NULL,       # scale.data= argument is deprecated in Seurat 5
+    graphs    = NULL
+  )
+  gc()
+
+  message("Saving checkpoint: ", checkpoint_path)
+  saveRDS(so, checkpoint_path)
+  gc()
+}
+
+print(so)
+```
+
+Subset to satellite cells
+```{r}
+keep <- so@meta.data[[celltype_col]] == celltype_val
+keep[is.na(keep)] <- FALSE   # NA in the column will throw error
+so <- so[, keep]
+gc()
+
+# Join layers
+so[["RNA"]] <- SeuratObject::JoinLayers(so[["RNA"]])
+gc()
+
+# Pull raw counts
+counts <- Seurat::GetAssayData(so, assay = "RNA", layer = "counts")
+
+# Write out
+Matrix::writeMM(counts, file.path(output_path, "matrix.mtx"))
+writeLines(rownames(counts), file.path(output_path, "genes.tsv"))
+writeLines(colnames(counts), file.path(output_path, "barcodes.tsv"))
+
+meta <- so@meta.data
+meta$cell_barcode <- rownames(meta)
+write.csv(meta, file.path(output_path, "metadata.csv"), row.names = FALSE)
+
+rm(so, counts, meta, keep)
+gc()
+```
