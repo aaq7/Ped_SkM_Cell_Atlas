@@ -1,0 +1,17 @@
+name: musc-multivi
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - scanpy
+      - anndata
+      - scvi-tools
+      - cellrank
+      - pandas
+      - numpy
+      - scipy
+      - matplotlib
+      - torch
