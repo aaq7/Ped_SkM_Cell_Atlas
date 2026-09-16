@@ -38,21 +38,23 @@ PIPELINE_SOURCE = os.environ.get("PIPELINE_SOURCE", "mrvi").strip().lower()
 if PIPELINE_SOURCE not in ("mrvi", "multivi"):
     raise ValueError(f"PIPELINE_SOURCE must be 'mrvi' or 'multivi', got {PIPELINE_SOURCE!r}")
 
-# Mingke's exported MultiVI object -- place the file downloaded from SharePoint
-# here (or override via the MULTIVI_SOURCE_H5AD env var) before running
-# multivi_subcluster.py. Schema (obs columns, obsm latent key) is not yet
-# verified against MRVI's -- see multivi_subcluster.py's checks.
+# Ben Kramer/Mingke Wu's "Cornell_BCH_orig_ident" MultiVI bundle (SharePoint,
+# Ped_SkM_Cell_Atlas/MultiVI) -- whole-atlas, 285,967 cells across all 60
+# BCH+Cornell samples (confirmed from the bundle's README.md/training_config.json
+# 2026-09-16), despite living in a folder that also holds Ben's separate FAP
+# work. Download multivi_results.h5ad from that bundle onto E3 storage, then
+# either place it here or override via the MULTIVI_SOURCE_H5AD env var.
 MULTIVI_SOURCE_H5AD = Path(
-    os.environ.get("MULTIVI_SOURCE_H5AD", PROJECT_DIR / "full_atlas_MultiVI.h5ad")
+    os.environ.get("MULTIVI_SOURCE_H5AD", PROJECT_DIR / "multivi_results.h5ad")
 )
-H5AD_MULTIVI_RAW = PROJECT_DIR / "musc_multivi_raw.h5ad"   # MuSC-subset of Mingke's object
+H5AD_MULTIVI_RAW = PROJECT_DIR / "musc_multivi_raw.h5ad"   # MuSC-subset of Ben's object
 H5AD_MULTIVI = PROJECT_DIR / "musc_multivi.h5ad"           # + neighbors/umap/leiden
-MULTIVI_MODEL_DIR = PROJECT_DIR / "multivi_model"          # trained MultiVI model (if we train rather than reuse Mingke's)
+MULTIVI_MODEL_DIR = PROJECT_DIR / "multivi_model"          # unused for now -- we reuse Ben's trained latent, not our own model
 
 # Candidate obsm keys to look for a precomputed MultiVI latent under, in order
-# of preference. Confirm the real key once the file is downloaded and update
-# this list/utils accordingly -- multivi_subcluster.py fails loudly rather
-# than guessing if none of these are present.
+# of preference. "X_multivi" is confirmed (package_validation.json) as what
+# Ben's bundle actually uses; the rest are left as fallbacks in case a future
+# re-export uses different casing.
 MULTIVI_LATENT_KEY_CANDIDATES = ["X_multivi", "X_MultiVI", "MultiVI", "X_multiVI"]
 
 # H5AD_ACTIVE / FIG_DIR / TABLES_DIR / RESULT_DIR below are what every

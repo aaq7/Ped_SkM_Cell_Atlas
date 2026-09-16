@@ -19,10 +19,10 @@ module load miniforge
 conda activate musc-multivi
 
 export PIPELINE_SOURCE=multivi
-# Point this at wherever you copied Mingke's downloaded object on E3 storage
-# (see the README note in this directory) if it isn't already at the default
-# path utils.py expects (full_atlas_MultiVI.h5ad next to this script).
-: "${MULTIVI_SOURCE_H5AD:=$PWD/full_atlas_MultiVI.h5ad}"
+# Point this at wherever you copied multivi_results.h5ad (from the
+# Cornell_BCH_orig_ident SharePoint bundle) on E3 storage, if it isn't
+# already at the default path utils.py expects (next to this script).
+: "${MULTIVI_SOURCE_H5AD:=$PWD/multivi_results.h5ad}"
 export MULTIVI_SOURCE_H5AD
 
 python multivi_subcluster.py
